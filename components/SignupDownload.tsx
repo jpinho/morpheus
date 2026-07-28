@@ -8,6 +8,7 @@ const SKILL_FILE = "/morpheus-skill.zip";
 export default function SignupDownload() {
   const [email, setEmail] = useState("");
   const [consent, setConsent] = useState(false);
+  const [website, setWebsite] = useState(""); // honeypot — real users leave this empty
   const [state, setState] = useState<"idle" | "sending" | "done" | "error">("idle");
   const [msg, setMsg] = useState("");
 
@@ -24,7 +25,7 @@ export default function SignupDownload() {
       const res = await fetch("/api/subscribe", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ email, consent, source: "download" }),
+        body: JSON.stringify({ email, consent, website, source: "download" }),
       });
       const data = await res.json();
       if (data.ok) {
@@ -72,6 +73,17 @@ export default function SignupDownload() {
           <p className="text-sm font-medium text-effort">{msg}</p>
         ) : (
           <form onSubmit={submitEmail} className="flex flex-col gap-3">
+            {/* honeypot: hidden from people, tempting to bots */}
+            <input
+              type="text"
+              name="website"
+              tabIndex={-1}
+              autoComplete="off"
+              aria-hidden="true"
+              value={website}
+              onChange={(e) => setWebsite(e.target.value)}
+              style={{ position: "absolute", left: "-9999px", width: 1, height: 1, opacity: 0 }}
+            />
             <label className="text-sm text-ink/80" htmlFor="email">
               {skill.emailPrompt}
             </label>
@@ -102,8 +114,9 @@ export default function SignupDownload() {
                 className="mt-0.5 accent-effort"
               />
               <span>
-                Email me updates about the skill and future talks. No spam, unsubscribe
-                anytime. Optional — the download above needs none of this.
+                Email me updates about the skill and future talks. I store only your email –
+                no tracking – and you can unsubscribe by replying to any message. Optional:
+                the download above needs none of this.
               </span>
             </label>
             {state === "error" && <p className="text-xs text-ceiling">{msg}</p>}
