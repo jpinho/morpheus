@@ -1,0 +1,27 @@
+# deps
+node_modules
+.pnp
+.pnp.*
+
+# next
+.next
+out
+build
+next-env.d.ts
+
+# vercel (contains project + org ids and pulled env/creds — never commit)
+.vercel
+
+# env / secrets — never commit any of these
+.env
+.env.*
+*.local
+*.token
+*.pem
+
+# misc
+.DS_Store
+*.log
+npm-debug.log*
+.turbo
+coverage
