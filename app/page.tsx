@@ -13,8 +13,8 @@ import {
 function SectionHeading({ eyebrow, title }: { eyebrow: string; title: string }) {
   return (
     <div className="mb-8">
-      <span className="eyebrow">{eyebrow}</span>
-      <h2 className="display mt-2 inline-block border-b-[3px] border-ceiling pb-2 text-3xl text-ink sm:text-4xl">
+      <span className="eyebrow block">{eyebrow}</span>
+      <h2 className="display mt-3 inline-block border-b-[3px] border-ceiling pb-2 text-3xl text-ink sm:text-4xl">
         {title}
       </h2>
     </div>
