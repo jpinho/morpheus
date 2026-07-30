@@ -1,26 +1,26 @@
 export const meta = {
   title: "Ceiling vs. Effort",
-  tagline: "Two dials control what a model can do. Neither one fixes a bad diagnosis.",
+  tagline: "Two dials decide what an AI agent can do. Neither one fixes a bad diagnosis.",
   pitch:
-    "Model choice isn't one dial, it's two: tier sets the ceiling on what the model can do, effort decides how hard it thinks before it hits that ceiling. Get either one wrong and you either overpay for capability the task didn't need, or underpay and hit a wall no amount of thinking gets you past. This talk is the framework for picking both correctly – and the real ticket, run two ways, that proves why the framework isn't optional.",
+    "Tier is the ceiling on what a model can do. Effort is how hard it thinks under that ceiling. Get the tier wrong and no amount of thinking saves you; get the effort wrong and you either overpay or stall. This is how to set both – with a real ticket, run two ways, that shows what it's worth.",
   description:
-    "A framework for choosing AI model tier and effort correctly, proven on a real ticket: $19 and right beats $32 and wrong. Book João Pinho to give the talk.",
+    "A framework for choosing AI model tier and effort, proven on one real ticket: $19 and right beats $32 and wrong.",
 };
 
 export const dials = {
   tier: {
     name: "Tier",
-    oneLiner: "The ceiling. What the model is capable of, full stop.",
+    oneLiner: "The ceiling. What the model can do.",
     ladder: "Haiku → Sonnet → Opus → Fable",
     body:
-      "Tier is raw capability – reasoning depth, world knowledge, how much state it can hold, how well it follows instructions when the task gets messy. It's fixed per model, not something you can dial up mid-task. A weaker model thinking harder never reaches a stronger model's ceiling; effort can't manufacture capability that isn't there. Pick tier for what the task actually demands, not for what feels safe to reach for.",
+      "Raw capability: reasoning, world knowledge, how much state it holds, how well it follows instructions when the task gets messy. It's fixed per model – you can't dial it up mid-task. A weaker model thinking harder never reaches a stronger one's ceiling. Pick tier for what the task demands, not for what feels safe.",
   },
   effort: {
     name: "Effort",
     oneLiner: "The deliberation. How hard the model thinks before it answers.",
     ladder: "low → medium → high → xhigh → max",
     body:
-      "Effort is thinking tokens – how much the model deliberates before it commits to an answer. It lets a model use the capability it already has; it doesn't add capability that isn't there. And it multiplies the token count, not the rate, so tier and effort compound against your bill rather than just adding to it. max overthinks – it burns budget second-guessing an answer the model already had at high. xhigh is the sweet spot for coding and agentic work. high is the sane default for everything else.",
+      "Thinking tokens – how much the model works before it commits to an answer. It uses the capability the model already has; it can't add capability that isn't there. And it multiplies the token count, not the rate, so tier and effort compound on your bill. max overthinks – it burns tokens second-guessing an answer it already had at high. xhigh is the sweet spot for coding and agentic work; high is the default for everything else.",
   },
 };
 
@@ -62,86 +62,66 @@ export const recipe = [
     n: 1,
     name: "Drive",
     text:
-      "Keep the main loop in one place, one driver, running at Sonnet @ medium–high. Don't switch the driver mid-task – every handoff costs you the context it took to get there. (Sonnet 5 is on intro pricing – $2 in / $10 out per 1M tokens – through 2026-08-31, so the workhorse tier is temporarily cheaper than its list price.)",
+      "Keep the main loop in one place, one driver, at Sonnet @ medium–high. Don't switch drivers mid-task – every handoff costs the context it took to build. (Sonnet 5 is on intro pricing, $2 in / $10 out per 1M tokens, through 2026-08-31.)",
   },
   {
     n: 2,
     name: "Delegate down",
     text:
-      "Hand fan-out reads, searches, and mechanical edits to the cheapest tier that can do them – Haiku. Practice context hygiene: distil what the driver ingests from those sub-agents, and compact aggressively. Raw dumps are how you pollute the loop that actually matters.",
+      "Hand fan-out reads, searches, and mechanical edits to the cheapest tier that can do them – Haiku. Keep the driver's context clean: distil what comes back from sub-agents, and compact aggressively. Raw dumps pollute the loop that matters.",
   },
   {
     n: 3,
     name: "Escalate up",
     text:
-      "Isolate the one genuinely hard sub-problem in the task and hand it to a top tier at high effort. One scalpel, not a blanket – escalating everything balloons the bill without improving the parts that were already fine.",
+      "Isolate the one genuinely hard sub-problem and give it to a top tier at high effort. One scalpel, not a blanket – escalating everything runs up the bill without improving the parts that were already fine.",
   },
   {
     n: 4,
     name: "Verify sideways",
     text:
-      "Spawn a fresh, independent agent and prompt it to refute the driver's conclusion, not review it. Ask it to prove the finding wrong; a majority-refute kills a bad diagnosis before it ships. This is the step that actually catches a wrong root cause – tier and effort never will.",
+      "Spawn a fresh, independent agent and tell it to refute the driver's conclusion, not review it. A majority-refute kills a bad diagnosis before it ships. This is the step that catches a wrong root cause – tier and effort never will.",
   },
   {
     n: 5,
     name: "Judge, don't average",
     text:
-      "Run N attempts in parallel and score them, then take the winner outright. Averaging parallel outputs gives you the mush in the middle – the average of a right answer and a wrong one isn't half-right, it's wrong with more words.",
+      "Run N attempts in parallel, score them, and take the winner. Averaging blends the right answer with the wrong ones and leaves you with neither.",
   },
 ];
 
 export const costTable = [
-  {
-    model: "Haiku 4.5",
-    input: "$1",
-    output: "$5",
-    relative: "1×",
-  },
-  {
-    model: "Sonnet 5",
-    input: "$3",
-    output: "$15",
-    relative: "3×",
-  },
-  {
-    model: "Opus 4.8",
-    input: "$5",
-    output: "$25",
-    relative: "5×",
-  },
-  {
-    model: "Fable 5",
-    input: "$10",
-    output: "$50",
-    relative: "10×",
-  },
+  { model: "Haiku 4.5", input: "$1", output: "$5", relative: "1×" },
+  { model: "Sonnet 5", input: "$3", output: "$15", relative: "3×" },
+  { model: "Opus 4.8", input: "$5", output: "$25", relative: "5×" },
+  { model: "Fable 5", input: "$10", output: "$50", relative: "10×" },
 ];
 
 export const antiPatterns = [
   {
     title: "Top tier, max effort, by reflex",
     body:
-      "It's the expensive move and it's often worse than xhigh. max overthinks – it burns tokens second-guessing an answer the model already had at high. Reflexive escalation isn't rigor, it's a tax you pay for not deciding which dial the task actually needs.",
+      "The expensive move, and often worse than xhigh: max burns tokens second-guessing an answer the model already had at high. Reaching for the top by default just means you didn't decide which dial the task needed.",
   },
   {
     title: "Averaging parallel outputs instead of judging them",
     body:
-      "Run three attempts and blend them and you don't get a better answer, you get the mush in the middle. A right answer averaged with a wrong one isn't half-right, it's wrong with extra words. Score the attempts and take the winner outright.",
+      "Blend three attempts and you don't get a better answer – you drag the good one toward the wrong ones. Score them and take the winner.",
   },
   {
-    title: "Same-family \"verification\"",
+    title: 'Same-family "verification"',
     body:
-      "Asking Sonnet to check Sonnet's work checks nothing – same training, same blind spots, same failure modes. Correlated failures pass review together. Tier-diversity is not vendor-diversity; if you want an independent check, get an independent model.",
+      "Sonnet checking Sonnet checks nothing – same training, same blind spots, failures that pass together. Tier-diversity is not vendor-diversity: for a real check, use a different model.",
   },
   {
     title: "Polite review prompts",
     body:
-      "'Review this' gets you agreement – models default to confirming whatever's in front of them. Ask it to refute the finding instead; that single change in framing turns a rubber stamp into an actual check.",
+      '"Review this" gets agreement – models default to confirming what\'s in front of them. Ask it to refute the finding instead. That one change turns a rubber stamp into a real check.',
   },
   {
     title: "Pasting raw dumps into the driver",
     body:
-      "Every unfiltered search result, log, or diff you hand the driver pollutes the context it's reasoning over. Distil first – summarize what a sub-agent found before it goes back into the main loop. A clean loop makes better decisions than a loaded one.",
+      "Every unfiltered search result, log, or diff you paste in pollutes the context the driver reasons over. Distil first – summarise what a sub-agent found before it goes back in.",
   },
 ];
 
@@ -160,22 +140,14 @@ export const benchmark = {
     shipped: "MRs that close the ticket",
   },
   lesson:
-    "Same real ticket, run two ways. Tier and effort harden execution – they get you clean code, passing tests, green lint. They do nothing for the diagnosis underneath. Only independence – a second agent instructed to refute, not agree – catches a wrong root cause before it ships. Spend more on a single top-tier pass and you buy confidence, not correctness.",
+    "Same ticket, two ways. Tier and effort harden execution – clean code, passing tests, green lint. They do nothing for the diagnosis underneath. Only independence – a second agent told to refute, not agree – catches a wrong root cause before it ships. A bigger solo pass buys confidence, not correctness.",
 };
 
 export const skill = {
   name: "Morpheus",
   blurb:
-    "Morpheus is the Ceiling vs. Effort framework encoded as a Claude Code skill. It picks tier and effort for the task in front of it, runs the delegate/escalate/verify loop, and – unlike a static prompt – it's self-improving: it reads its own LESSONS.md before it starts and appends to it after, so every run sharpens the next one.",
+    "The Ceiling vs. Effort framework as a Claude Code skill. It picks tier and effort for the task in front of it and runs the delegate / escalate / verify loop. Unlike a static prompt, it's self-improving: it reads its own LESSONS.md before it starts and appends to it after, so each run sharpens the next.",
   emailPrompt:
-    "Email is optional – the download works without one. Leave it if you want João to reach you directly with updates to the skill or news on future talks.",
-  downloadNote: "Free. No account, no paywall – just the skill.",
-};
-
-export const speaker = {
-  cta: "Book João Pinho to give this talk.",
-  blurb:
-    "João Pinho is a Distinguished Engineer at epilot, building energy and utility SaaS. He drives AI-agent orchestration in production – not as a slide, as the job – and this talk is the framework he uses to keep that work correct and affordable at the same time.",
-  note:
-    "This site is João's speaker entry door – reach out here to get him in front of your team, conference, or meetup.",
+    "Email is optional – the download works without one. Leave it if you want João to reach you with updates to the skill or future talks.",
+  downloadNote: "Free. No account, no sign-up – just the skill.",
 };

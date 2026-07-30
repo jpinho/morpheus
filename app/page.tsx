@@ -7,7 +7,6 @@ import {
   dials,
   meta,
   recipe,
-  speaker,
 } from "@/lib/content";
 
 function SectionHeading({ eyebrow, title }: { eyebrow: string; title: string }) {
@@ -36,7 +35,6 @@ export default function Home() {
             <a href="#framework" className="hover:text-ink">Framework</a>
             <a href="#recipe" className="hover:text-ink">Recipe</a>
             <a href="#skill" className="hover:text-ink">Skill</a>
-            <a href="#speak" className="hover:text-ink">Speak</a>
           </nav>
         </div>
       </header>
@@ -58,10 +56,10 @@ export default function Home() {
             Get the skill
           </a>
           <a
-            href="#speak"
+            href="#framework"
             className="rounded-md border border-ink/20 px-6 py-3 text-sm font-semibold text-ink transition hover:border-ink/50"
           >
-            Book the talk
+            See the framework
           </a>
         </div>
       </section>
@@ -216,19 +214,6 @@ export default function Home() {
             <SignupDownload />
           </div>
         </div>
-      </section>
-
-      {/* speaker */}
-      <section id="speak" className="mx-auto max-w-5xl px-5 py-16">
-        <SectionHeading eyebrow="For organisers" title={speaker.cta} />
-        <p className="max-w-readable text-lg leading-relaxed text-ink/85">{speaker.blurb}</p>
-        <p className="mt-4 max-w-readable text-[15px] text-dim">{speaker.note}</p>
-        <a
-          href="mailto:j.pinho@epilot.cloud?subject=Ceiling%20vs.%20Effort%20talk"
-          className="mt-6 inline-block rounded-md bg-effort px-6 py-3 text-sm font-semibold text-white transition hover:opacity-90"
-        >
-          Invite me to speak
-        </a>
       </section>
 
       {/* footer */}
