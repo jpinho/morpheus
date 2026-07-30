@@ -12,7 +12,10 @@ import {
 function SectionHeading({ eyebrow, title }: { eyebrow: string; title: string }) {
   return (
     <div className="mb-8">
-      <span className="eyebrow block">{eyebrow}</span>
+      <span className="eyebrow block">
+        <span className="text-dim/60">{"// "}</span>
+        {eyebrow}
+      </span>
       <h2 className="display mt-3 inline-block border-b-[3px] border-ceiling pb-2 text-3xl text-ink sm:text-4xl">
         {title}
       </h2>
@@ -20,76 +23,121 @@ function SectionHeading({ eyebrow, title }: { eyebrow: string; title: string }) 
   );
 }
 
+function TermWindow({
+  title,
+  children,
+}: {
+  title: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="term">
+      <div className="term-bar">
+        <span className="term-dot" />
+        <span className="term-dot" />
+        <span className="term-dot" />
+        <span className="term-title">{title}</span>
+      </div>
+      <div className="p-5 font-mono text-[13px] leading-relaxed">{children}</div>
+    </div>
+  );
+}
+
+function LogRow({
+  mark,
+  ok,
+  label,
+  value,
+}: {
+  mark: string;
+  ok: boolean;
+  label: string;
+  value: string;
+}) {
+  return (
+    <div className="flex gap-3 py-1">
+      <span className={ok ? "text-ok" : "text-ceiling"}>{mark}</span>
+      <span className="w-20 shrink-0 text-dim">{label}</span>
+      <span className="text-ink/90">{value}</span>
+    </div>
+  );
+}
+
+// node colors encode the direction of each move: down = cheap/dim,
+// up = ceiling red, sideways = effort blue, judge = green
+const traceColor = ["border-ink/60", "border-dim", "border-ceiling", "border-effort", "border-ok"];
+
 export default function Home() {
   return (
     <main className="text-ink">
       {/* header */}
-      <header className="sticky top-0 z-10 border-b border-rule bg-paper/85 backdrop-blur">
+      <header className="sticky top-0 z-10 border-b border-rule bg-paper/80 backdrop-blur">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-5 py-3.5">
           <a href="#top" className="font-serif text-lg font-semibold tracking-tightish">
             <span className="text-ceiling">Ceiling</span>{" "}
             <span className="italic text-dim">vs.</span>{" "}
             <span className="text-effort">Effort</span>
           </a>
-          <nav className="hidden gap-6 text-sm text-dim sm:flex">
-            <a href="#framework" className="hover:text-ink">Framework</a>
-            <a href="#recipe" className="hover:text-ink">Recipe</a>
-            <a href="#skill" className="hover:text-ink">Skill</a>
+          <nav className="hidden gap-6 font-mono text-[13px] text-dim sm:flex">
+            <a href="#framework" className="transition hover:text-ink">framework</a>
+            <a href="#recipe" className="transition hover:text-ink">recipe</a>
+            <a href="#skill" className="transition hover:text-ink">skill</a>
           </nav>
         </div>
       </header>
 
       {/* hero */}
-      <section id="top" className="mx-auto max-w-5xl px-5 pb-16 pt-16 sm:pt-24">
-        <h1 className="display text-5xl leading-[1.05] sm:text-7xl">
-          <span className="text-ceiling">Ceiling</span>{" "}
-          <span className="italic font-normal text-dim">vs.</span>{" "}
-          <span className="text-effort">Effort</span>
-        </h1>
-        <p className="mt-5 font-serif text-2xl text-ink/90 sm:text-3xl">{meta.tagline}</p>
-        <p className="mt-6 max-w-readable text-lg leading-relaxed text-ink/80">{meta.pitch}</p>
-        <div className="mt-8 flex flex-wrap gap-3">
-          <a
-            href="#skill"
-            className="rounded-md bg-ceiling px-6 py-3 text-sm font-semibold text-white transition hover:opacity-90"
-          >
-            Get the skill
-          </a>
-          <a
-            href="#framework"
-            className="rounded-md border border-ink/20 px-6 py-3 text-sm font-semibold text-ink transition hover:border-ink/50"
-          >
-            See the framework
-          </a>
+      <section id="top" className="relative overflow-hidden">
+        <div aria-hidden className="hero-glow pointer-events-none absolute inset-0" />
+        <div aria-hidden className="hero-bg pointer-events-none absolute inset-0" />
+        <div className="relative mx-auto max-w-5xl px-5 pb-16 pt-16 sm:pt-24">
+          <p className="font-mono text-sm text-dim">
+            <span className="text-effort">~</span> $ how to actually drive AI agents
+            <span className="caret" aria-hidden />
+          </p>
+          <h1 className="display mt-6 text-5xl leading-[1.05] sm:text-7xl">
+            <span className="text-ceiling">Ceiling</span>{" "}
+            <span className="italic font-normal text-dim">vs.</span>{" "}
+            <span className="text-effort">Effort</span>
+          </h1>
+          <p className="mt-5 font-serif text-2xl text-ink/90 sm:text-3xl">{meta.tagline}</p>
+          <p className="mt-6 max-w-readable text-lg leading-relaxed text-ink/75">{meta.pitch}</p>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <a
+              href="#skill"
+              className="rounded-md bg-ceiling px-6 py-3 text-sm font-semibold text-white transition hover:opacity-90"
+            >
+              Get the skill
+            </a>
+            <a
+              href="#framework"
+              className="rounded-md border border-ink/25 px-6 py-3 text-sm font-semibold text-ink transition hover:border-ink/60"
+            >
+              See the framework
+            </a>
+          </div>
         </div>
       </section>
 
-      {/* benchmark band — the proof */}
+      {/* benchmark band — the proof, as two session logs */}
       <section className="border-y border-rule bg-tint">
         <div className="mx-auto max-w-5xl px-5 py-14">
           <p className="display text-3xl text-ink sm:text-4xl">{benchmark.headline}</p>
           <div className="mt-8 grid gap-5 sm:grid-cols-2">
-            {[benchmark.orchestrated, benchmark.solo].map((c) => (
-              <div key={c.label} className="rounded-lg border border-rule bg-white p-6">
-                <span className="eyebrow">{c.label}</span>
-                <dl className="mt-3 space-y-2 text-sm">
-                  <div className="flex justify-between gap-4">
-                    <dt className="text-dim">Spend</dt>
-                    <dd className="text-right font-mono">{c.spend}</dd>
-                  </div>
-                  <div className="flex justify-between gap-4">
-                    <dt className="text-dim">Diagnosis</dt>
-                    <dd className="text-right">{c.diagnosis}</dd>
-                  </div>
-                  <div className="flex justify-between gap-4">
-                    <dt className="text-dim">Shipped</dt>
-                    <dd className="text-right">{c.shipped}</dd>
-                  </div>
-                </dl>
-              </div>
-            ))}
+            <TermWindow title="orchestrated – the full recipe">
+              <LogRow mark="$" ok label="spend" value={benchmark.orchestrated.spend} />
+              <LogRow mark="✓" ok label="diagnosis" value={benchmark.orchestrated.diagnosis} />
+              <LogRow mark="✓" ok label="shipped" value={benchmark.orchestrated.shipped} />
+              <div className="mt-3 border-t border-rule pt-2 text-ok">exit 0</div>
+            </TermWindow>
+            <TermWindow title="solo – fable-5 @ max">
+              <LogRow mark="$" ok={false} label="spend" value={benchmark.solo.spend} />
+              <LogRow mark="✗" ok={false} label="diagnosis" value={benchmark.solo.diagnosis} />
+              <LogRow mark="✗" ok={false} label="shipped" value={benchmark.solo.shipped} />
+              <div className="mt-3 border-t border-rule pt-2 text-ceiling">exit 1</div>
+            </TermWindow>
           </div>
-          <p className="mt-6 max-w-readable text-[15px] leading-relaxed text-ink/70">
+          <p className="mt-6 max-w-readable text-[15px] leading-relaxed text-ink/60">
             {benchmark.lesson}
           </p>
         </div>
@@ -97,35 +145,36 @@ export default function Home() {
 
       {/* framework: two dials */}
       <section id="framework" className="mx-auto max-w-5xl px-5 py-16">
-        <SectionHeading eyebrow="The mental model" title="Two dials, not one" />
+        <SectionHeading eyebrow="the mental model" title="Two dials, not one" />
         <div className="grid gap-5 sm:grid-cols-2">
           {[dials.tier, dials.effort].map((d, i) => (
-            <div key={d.name} className="rounded-lg border border-rule p-6">
-              <div
-                className="h-[3px] w-10 rounded"
-                style={{ background: i === 0 ? "#8c1d2c" : "#2f4a85" }}
-              />
-              <h3 className="display mt-4 text-xl" style={{ color: i === 0 ? "#8c1d2c" : "#2f4a85" }}>
+            <div key={d.name} className="rounded-lg border border-rule bg-panel p-6">
+              <span className={`font-mono text-xs ${i === 0 ? "text-ceiling" : "text-effort"}`}>
+                dial 0{i + 1}
+              </span>
+              <h3 className={`display mt-2 text-xl ${i === 0 ? "text-ceiling" : "text-effort"}`}>
                 {d.name}
               </h3>
               <p className="mt-1 font-serif text-lg italic text-dim">{d.oneLiner}</p>
               <p className="mt-3 font-mono text-sm text-ink/70">{d.ladder}</p>
-              <p className="mt-3 text-[15px] leading-relaxed text-ink/80">{d.body}</p>
+              <p className="mt-3 text-[15px] leading-relaxed text-ink/75">{d.body}</p>
             </div>
           ))}
         </div>
 
         {/* decision table */}
         <div className="mt-14">
-          <span className="eyebrow">The cheatsheet</span>
+          <span className="eyebrow">
+            <span className="text-dim/60">{"// "}</span>the cheatsheet
+          </span>
           <h3 className="display mt-2 text-2xl">Pick tier and effort</h3>
           <div className="mt-5 overflow-x-auto">
             <table className="w-full border-collapse text-sm">
               <thead>
-                <tr className="border-b-2 border-ink text-left">
-                  <th className="py-2 pr-4 font-sans text-xs font-bold uppercase tracking-widest text-dim">Situation</th>
-                  <th className="py-2 pr-4 font-sans text-xs font-bold uppercase tracking-widest text-dim">Tier</th>
-                  <th className="py-2 font-sans text-xs font-bold uppercase tracking-widest text-dim">Effort</th>
+                <tr className="border-b border-ink/40 text-left">
+                  <th className="py-2 pr-4 font-mono text-xs font-normal text-dim">situation</th>
+                  <th className="py-2 pr-4 font-mono text-xs font-normal text-dim">tier</th>
+                  <th className="py-2 font-mono text-xs font-normal text-dim">effort</th>
                 </tr>
               </thead>
               <tbody>
@@ -148,25 +197,36 @@ export default function Home() {
 
         {/* cost table */}
         <div className="mt-14">
-          <span className="eyebrow">What it costs</span>
+          <span className="eyebrow">
+            <span className="text-dim/60">{"// "}</span>what it costs
+          </span>
           <h3 className="display mt-2 text-2xl">Per 1M tokens</h3>
           <div className="mt-5 overflow-x-auto">
             <table className="w-full border-collapse text-sm">
               <thead>
-                <tr className="border-b-2 border-ink text-left">
-                  <th className="py-2 pr-4 font-sans text-xs font-bold uppercase tracking-widest text-dim">Model</th>
-                  <th className="py-2 pr-4 text-right font-sans text-xs font-bold uppercase tracking-widest text-dim">Input</th>
-                  <th className="py-2 pr-4 text-right font-sans text-xs font-bold uppercase tracking-widest text-dim">Output</th>
-                  <th className="py-2 text-right font-sans text-xs font-bold uppercase tracking-widest text-dim">Relative</th>
+                <tr className="border-b border-ink/40 text-left">
+                  <th className="py-2 pr-4 font-mono text-xs font-normal text-dim">model</th>
+                  <th className="py-2 pr-4 text-right font-mono text-xs font-normal text-dim">input</th>
+                  <th className="py-2 pr-4 text-right font-mono text-xs font-normal text-dim">output</th>
+                  <th className="py-2 text-right font-mono text-xs font-normal text-dim">relative</th>
                 </tr>
               </thead>
-              <tbody className="font-mono">
+              <tbody className="font-mono tabular-nums">
                 {costTable.map((r) => (
                   <tr key={r.model} className="border-b border-rule">
                     <td className="py-3 pr-4 font-sans font-semibold">{r.model}</td>
-                    <td className="py-3 pr-4 text-right">{r.input}</td>
-                    <td className="py-3 pr-4 text-right">{r.output}</td>
-                    <td className="py-3 text-right">{r.relative}</td>
+                    <td className="py-3 pr-4 text-right text-ink/85">{r.input}</td>
+                    <td className="py-3 pr-4 text-right text-ink/85">{r.output}</td>
+                    <td className="py-3">
+                      <span className="flex items-center justify-end gap-3">
+                        <span
+                          aria-hidden
+                          className="h-1.5 rounded-full bg-gradient-to-r from-effort to-ceiling"
+                          style={{ width: `${parseFloat(r.relative) * 8}px` }}
+                        />
+                        {r.relative}
+                      </span>
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -176,16 +236,24 @@ export default function Home() {
         </div>
       </section>
 
-      {/* recipe */}
+      {/* recipe — rendered as an agent trace */}
       <section id="recipe" className="border-t border-rule bg-tint">
         <div className="mx-auto max-w-5xl px-5 py-16">
-          <SectionHeading eyebrow="The workflow" title="One shape, always" />
-          <ol className="space-y-5">
-            {recipe.map((m) => (
-              <li key={m.n} className="flex gap-4">
-                <span className="mt-1 font-mono text-sm font-bold text-ceiling">{m.n}</span>
-                <p className="text-[15px] leading-relaxed text-ink/85">
-                  <span className="font-semibold text-ink">{m.name}</span> – {m.text}
+          <SectionHeading eyebrow="the workflow" title="One shape, always" />
+          <ol className="ml-2 space-y-9 border-l border-rule sm:ml-3">
+            {recipe.map((m, i) => (
+              <li key={m.n} className="relative pl-8 sm:pl-10">
+                <span
+                  aria-hidden
+                  className={`absolute -left-[7px] top-1.5 h-3.5 w-3.5 rounded-full border-2 bg-paper ${traceColor[i]}`}
+                />
+                <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1.5">
+                  <span className="font-mono text-xs text-dim">{m.n}/5</span>
+                  <h3 className="font-semibold text-ink">{m.name}</h3>
+                  <span className="chip">{m.agent}</span>
+                </div>
+                <p className="mt-2 max-w-readable text-[15px] leading-relaxed text-ink/75">
+                  {m.text}
                 </p>
               </li>
             ))}
@@ -195,12 +263,15 @@ export default function Home() {
 
       {/* anti-patterns */}
       <section className="mx-auto max-w-5xl px-5 py-16">
-        <SectionHeading eyebrow="What not to do" title="Anti-patterns" />
-        <ul className="grid gap-4 sm:grid-cols-2">
+        <SectionHeading eyebrow="what not to do" title="Anti-patterns" />
+        <ul className="grid gap-5 sm:grid-cols-2">
           {antiPatterns.map((a) => (
-            <li key={a.title} className="border-l-2 border-ceiling pl-4">
-              <span className="font-semibold">{a.title}.</span>{" "}
-              <span className="text-ink/75">{a.body}</span>
+            <li key={a.title} className="flex gap-3">
+              <span aria-hidden className="mt-0.5 font-mono text-ceiling">✗</span>
+              <p className="text-[15px] leading-relaxed">
+                <span className="font-semibold text-ink">{a.title}.</span>{" "}
+                <span className="text-ink/70">{a.body}</span>
+              </p>
             </li>
           ))}
         </ul>
@@ -209,7 +280,7 @@ export default function Home() {
       {/* skill download */}
       <section id="skill" className="border-t border-rule bg-tint">
         <div className="mx-auto max-w-5xl px-5 py-16">
-          <SectionHeading eyebrow="Take it home" title="The skill" />
+          <SectionHeading eyebrow="take it home" title="The skill" />
           <div className="max-w-2xl">
             <SignupDownload />
           </div>
@@ -223,7 +294,7 @@ export default function Home() {
             <span className="text-ceiling">Ceiling</span> <span className="italic">vs.</span>{" "}
             <span className="text-effort">Effort</span> · João Pinho
           </span>
-          <span className="text-xs">Two dials. One workflow.</span>
+          <span className="font-mono text-xs">two dials · one workflow</span>
         </div>
       </footer>
     </main>

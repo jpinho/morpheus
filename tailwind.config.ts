@@ -9,14 +9,16 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        paper: "#fbfbfc",
-        ink: "#16181d",
-        dim: "#6b7280",
-        rule: "#dcdfe4",
-        tint: "#f1f3f6",
-        ceiling: "#8c1d2c",
-        effort: "#2f4a85",
-        effortbg: "#e9edf6",
+        paper: "#0a0d13",
+        tint: "#0d1119",
+        panel: "#10151d",
+        ink: "#e7eaf0",
+        dim: "#8a93a4",
+        rule: "#1d2430",
+        ceiling: "#e5484d",
+        effort: "#7aa2f7",
+        effortbg: "#131e33",
+        ok: "#46d39a",
       },
       fontFamily: {
         serif: ['"Iowan Old Style"', '"Charter"', "Georgia", '"Times New Roman"', "serif"],

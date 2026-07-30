@@ -61,30 +61,35 @@ export const recipe = [
   {
     n: 1,
     name: "Drive",
+    agent: "sonnet @ medium–high",
     text:
       "Keep the main loop in one place, one driver, at Sonnet @ medium–high. Don't switch drivers mid-task – every handoff costs the context it took to build. (Sonnet 5 is on intro pricing, $2 in / $10 out per 1M tokens, through 2026-08-31.)",
   },
   {
     n: 2,
     name: "Delegate down",
+    agent: "haiku",
     text:
       "Hand fan-out reads, searches, and mechanical edits to the cheapest tier that can do them – Haiku. Keep the driver's context clean: distil what comes back from sub-agents, and compact aggressively. Raw dumps pollute the loop that matters.",
   },
   {
     n: 3,
     name: "Escalate up",
+    agent: "opus/fable @ high+",
     text:
       "Isolate the one genuinely hard sub-problem and give it to a top tier at high effort. One scalpel, not a blanket – escalating everything runs up the bill without improving the parts that were already fine.",
   },
   {
     n: 4,
     name: "Verify sideways",
+    agent: "fresh agent · refute",
     text:
       "Spawn a fresh, independent agent and tell it to refute the driver's conclusion, not review it. A majority-refute kills a bad diagnosis before it ships. This is the step that catches a wrong root cause – tier and effort never will.",
   },
   {
     n: 5,
     name: "Judge, don't average",
+    agent: "n attempts · pick the winner",
     text:
       "Run N attempts in parallel, score them, and take the winner. Averaging blends the right answer with the wrong ones and leaves you with neither.",
   },

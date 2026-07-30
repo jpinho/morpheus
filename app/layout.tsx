@@ -1,6 +1,10 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { meta } from "@/lib/content";
 import "./globals.css";
+
+export const viewport: Viewport = {
+  themeColor: "#0a0d13",
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://morpheus-jpinho-projects.vercel.app"),
